@@ -1,0 +1,26 @@
+---
+- name: Install EPEL and cowsay
+  hosts: bojec
+  become: true
+
+  tasks:
+    - name: Check CRB repository
+      ansible.builtin.command:
+        cmd: dnf repolist --enabled
+      register: enabled_repos
+      changed_when: false
+
+    - name: Enable CRB repository
+      ansible.builtin.command:
+        cmd: dnf config-manager setopt crb.enabled=1
+      when: "'crb' not in enabled_repos.stdout.split()"
+
+    - name: Install EPEL repository
+      ansible.builtin.dnf:
+        name: epel-release
+        state: present
+
+    - name: Install cowsay
+      ansible.builtin.dnf:
+        name: cowsay
+        state: present
