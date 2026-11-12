@@ -1,2 +1,1 @@
-[bojec]
-bojec.nti.tul.cz ansible_user=Kobe
+bojec ansible_host=bojec.nti.tul.cz ansible_user=Kobe ansible_ssh_private_key_file=/home/kobe/Desktop/klice/ssklic.txt
