@@ -1,0 +1,18 @@
+[global]
+    workgroup = {{ samba_workgroup }}
+    server string = {{ samba_server_string }}
+    security = user
+    map to guest = Never
+    server min protocol = SMB2
+
+{% for share in samba_shares %}
+[{{ share.name }}]
+    path = {{ share.path }}
+    comment = {{ share.comment }}
+    browseable = {{ share.browseable }}
+    read only = {{ share.read_only }}
+    valid users = {{ share.valid_users }}
+    create mask = 0660
+    directory mask = 0770
+
+{% endfor %}

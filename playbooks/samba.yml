@@ -1,0 +1,112 @@
+
+---
+- name: Configure Samba server
+  hosts: bojec
+  become: true
+
+  vars:
+    samba_user: sambauser
+    samba_group: sambashare
+
+    samba_workgroup: WORKGROUP
+    samba_server_string: Samba server on %h
+
+    samba_shares:
+      - name: shared
+        path: /srv/samba/shared
+        comment: Shared files
+        browseable: "yes"
+        read_only: "no"
+        valid_users: "@{{ samba_group }}"
+
+  tasks:
+    - name: Install Samba packages
+      ansible.builtin.dnf:
+        name:
+          - samba
+          - samba-client
+          - samba-common
+        state: present
+
+    - name: Configure TUL IPv4 firewall source
+      ansible.posix.firewalld:
+        zone: home
+        source: 147.230.0.0/16
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: Configure TUL IPv6 firewall source
+      ansible.posix.firewalld:
+        zone: home
+        source: "2001:718:1C01::/48"
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: Allow Samba only in TUL firewall zone
+      ansible.posix.firewalld:
+        zone: home
+        service: samba
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: Create Samba group
+      ansible.builtin.group:
+        name: "{{ samba_group }}"
+        state: present
+
+    - name: Create Samba user
+      ansible.builtin.user:
+        name: "{{ samba_user }}"
+        group: "{{ samba_group }}"
+        create_home: false
+        home: /nonexistent
+        shell: /sbin/nologin
+        password_lock: true
+        state: present
+
+    - name: Create Samba share directories
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ samba_user }}"
+        group: "{{ samba_group }}"
+        mode: "2770"
+      loop: "{{ samba_shares }}"
+
+    - name: Configure SELinux context for Samba shares
+      community.general.sefcontext:
+        target: '/srv/samba(/.*)?'
+        setype: samba_share_t
+        state: present
+      register: samba_selinux_context
+
+    - name: Apply SELinux context to Samba directories
+      ansible.builtin.command:
+        cmd: restorecon -RFv /srv/samba
+      register: samba_restorecon
+      changed_when: samba_restorecon.stdout | length > 0
+
+    - name: Generate Samba configuration
+      ansible.builtin.template:
+        src: ../templates/smb.conf.j2
+        dest: /etc/samba/smb.conf
+        owner: root
+        group: root
+        mode: "0644"
+        validate: /usr/bin/testparm -s %s
+      notify: Restart Samba
+
+    - name: Enable and start Samba
+      ansible.builtin.systemd_service:
+        name: smb
+        enabled: true
+        state: started
+
+  handlers:
+    - name: Restart Samba
+      ansible.builtin.systemd_service:
+        name: smb
+        state: restarted
