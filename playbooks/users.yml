@@ -1,0 +1,20 @@
+
+---
+- name: Manage user and SSH keys
+  hosts: bojec
+  become: true
+
+  tasks:
+    - name: Ensure user exists
+      ansible.builtin.user:
+        name: "{{ managed_user }}"
+        state: present
+        update_password: on_create
+
+    - name: Configure authorized SSH keys
+      ansible.posix.authorized_key:
+        user: "{{ managed_user }}"
+        key: "{{ managed_ssh_keys | join('\n') }}"
+        state: present
+        exclusive: true
+        manage_dir: true

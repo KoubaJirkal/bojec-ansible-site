@@ -1,0 +1,11 @@
+---
+managed_user: Kobe
+
+managed_ssh_keys:
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICT4l3+5X/yEfLjBZa8e9pAu4trziODXgxy7Lyatm96Z hynek@HyMBook"
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUT9B0fz3T0tQw3sowo4PPpR9K/Hz2Jf2njO8Hp7vzQ expert@TriPro"
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBaddUZyiqsjiDTtVSFq6sOFomVvxHi38VZohJKxZP8J hynek@HynDell"
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKQ8rMApEU16khjwlLprSUjhRU1qxQKHf8n3RlaX9p2v hynek.vaclav.svobodny@a0300.nti.tul.cz"
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtT+WvkbvbocfIxVKmA1Fedj/omQGHuKeo/JtdB+sSMBQtA7JQV8hLCDXA9aiQpB/B+iAe0I4+Cf8yBwb2nh+KopvWhfcjBGYz4RZfzwRn0IMzCY4PKZf1jrRT/c2/vWR8IUep4+n5bjjdFM46B7T6E20btTDO7DXPYKy1RuxO2d2COwucrVsnlV6qW8dSOQogruB4CkrKwTMDDomBUppg2AdfzJDM/BQfQpNeB9tw38GM1sMEyLI5+PuojBqR6JeykOEuzSwdRqHmGOTIre16MBYsMscgsf0h2WLbQaMuOonjYsIoONjjB0mMeV2YWA9lRfTdEEKewAaIBj+br23f melian@proxima"
+  - "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFj95QU9g4zOxeuVl+4MgzLlUI8dqcKKYEpRlZOCbQQISDqNP6DeZM4v2qqOtCqlazSb8e5qyI/89Y8ZfbQcGOQ= melian@gaspoda"
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPDBFpxYEL7+vC09GpFXQXIi/LtsGcMvjSNz6CWi2grD"
